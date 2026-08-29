@@ -7,60 +7,54 @@
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-<div id="loginView" class="login">
+<div id="login" class="login">
   <div class="login-card">
     <div class="logo">DT</div>
     <h1>Portafolio Design Thinking</h1>
     <p>Gestiona proyectos y documenta las cinco etapas del proceso.</p>
     <form id="loginForm">
-      <label>Usuario<input id="username" required></label>
-      <label>Contraseña<input id="password" type="password" required></label>
+      <label>Usuario<input id="username" autocomplete="username" required></label>
+      <label>Contraseña<input id="password" type="password" autocomplete="current-password" required></label>
       <button class="btn primary full">Iniciar sesión</button>
       <small id="loginMsg"></small>
     </form>
-    <button id="demoBtn" class="btn secondary full">Entrar en modo demostración</button>
+    <button id="demo" class="btn secondary full">Modo demostración</button>
   </div>
 </div>
 
-<div id="appView" class="app hidden">
+<div id="app" class="app hidden">
 <aside class="sidebar">
   <div class="brand"><span>DT</span><div><b>Design Thinking</b><small>Portafolio educativo</small></div></div>
   <nav>
-    <button class="nav active" data-section="dashboard">▦ <span>Dashboard</span></button>
-    <button class="nav" data-section="proyectos">◈ <span>Mis proyectos</span></button>
-    <button class="nav" data-section="etapas">◎ <span>Etapas</span></button>
-    <button class="nav" data-section="evidencias">▣ <span>Evidencias</span></button>
+    <button class="nav active" data-page="dashboard">▦ <span>Dashboard</span></button>
+    <button class="nav" data-page="proyectos">◈ <span>Mis proyectos</span></button>
+    <button class="nav" data-page="etapas">◎ <span>Etapas</span></button>
   </nav>
   <div class="bottom"><div class="api"><i></i><span id="apiStatus">API</span></div><button id="logout">↪ Cerrar sesión</button></div>
 </aside>
 
 <main>
-<header><div><small>PLATAFORMA EDUCATIVA</small><h2 id="title">Dashboard</h2></div><div class="actions"><button id="refresh">↻</button><div class="avatar">U</div></div></header>
+<header><div><small>PLATAFORMA EDUCATIVA</small><h2 id="pageTitle">Dashboard</h2></div><div class="actions"><button id="refresh">↻</button><div class="avatar">U</div></div></header>
 
 <section id="dashboard" class="section">
-  <div class="hero"><div><em>DESIGN THINKING</em><h1>Convierte problemas en soluciones.</h1><p>Documenta el proceso de tu equipo desde la empatía hasta la prueba del prototipo.</p><button class="btn white" id="new1">+ Nuevo proyecto</button></div><div class="steps">1　2　3　4　5</div></div>
-  <div class="stats">
-    <article><span>Proyectos</span><strong id="nProjects">0</strong><small>registrados</small></article>
-    <article><span>En proceso</span><strong id="nActive">0</strong><small>proyectos activos</small></article>
-    <article><span>Completados</span><strong id="nDone">0</strong><small>proyectos finalizados</small></article>
-    <article><span>Progreso medio</span><strong id="nAvg">0%</strong><small>de las etapas</small></article>
-  </div>
-  <div class="panel"><div class="panel-head"><div><h3>Mis proyectos</h3><p>Continúa donde lo dejaste.</p></div><button class="link" data-go="proyectos">Ver todos →</button></div><div id="dashProjects" class="cards"></div></div>
+<div class="hero"><div><em>DESIGN THINKING</em><h1>Convierte problemas en soluciones.</h1><p>Documenta el proceso de tu equipo desde la empatía hasta la prueba del prototipo.</p><button class="btn white" id="newProject1">+ Nuevo proyecto</button></div><div class="steps">1　2　3　4　5</div></div>
+<div class="stats">
+<article><span>Proyectos</span><strong id="total">0</strong><small>registrados</small></article>
+<article><span>En proceso</span><strong id="active">0</strong><small>proyectos activos</small></article>
+<article><span>Completados</span><strong id="done">0</strong><small>proyectos finalizados</small></article>
+<article><span>Progreso medio</span><strong id="average">0%</strong><small>de los proyectos</small></article>
+</div>
+<div class="panel"><div class="panel-head"><div><h3>Mis proyectos</h3><p>Continúa donde lo dejaste.</p></div><button class="link" data-go="proyectos">Ver todos →</button></div><div id="dashboardProjects" class="cards"></div></div>
 </section>
 
 <section id="proyectos" class="section hidden">
-  <div class="section-head"><div><h1>Mis proyectos</h1><p>Crea y administra los proyectos de tu equipo.</p></div><button class="btn primary" id="new2">+ Nuevo proyecto</button></div>
-  <div id="projectList" class="list"></div>
+<div class="section-head"><div><h1>Mis proyectos</h1><p>Los proyectos se guardan directamente en PostgreSQL mediante tu API de Render.</p></div><button class="btn primary" id="newProject2">+ Nuevo proyecto</button></div>
+<div id="projects" class="list"></div>
 </section>
 
 <section id="etapas" class="section hidden">
-  <div class="section-head"><div><h1>Proceso Design Thinking</h1><p>Selecciona un proyecto para consultar sus etapas.</p></div></div>
-  <div id="stageArea"></div>
-</section>
-
-<section id="evidencias" class="section hidden">
-  <div class="section-head"><div><h1>Evidencias</h1><p>Documentos, imágenes, entrevistas y demás evidencias del proyecto.</p></div></div>
-  <div class="empty"><div>▣</div><h3>Módulo de evidencias</h3><p>La interfaz está preparada para conectarse con los endpoints de evidencias del backend.</p></div>
+<div class="section-head"><div><h1>Proceso Design Thinking</h1><p>Las etapas se cargan desde <code>/api/etapas/proyecto/{id}</code>.</p></div></div>
+<div id="stageArea"></div>
 </section>
 </main>
 </div>
@@ -69,10 +63,12 @@
 <div class="modal-card">
 <div class="modal-head"><h2>Nuevo proyecto</h2><button id="close">×</button></div>
 <form id="projectForm">
-<label>Título<input id="pTitle" maxlength="200" required placeholder="Ej. Cuidemos nuestros espacios comunes"></label>
-<label>Descripción<textarea id="pDesc" rows="3"></textarea></label>
-<label>Problema inicial<textarea id="pProblem" rows="3" placeholder="Ej. Poco cuidado de los espacios comunes..."></textarea></label>
-<label>ID del equipo<input id="teamId" type="number" value="1" min="1" required></label>
+<label>Título<input id="title" maxlength="255" required placeholder="Ej. Cuidemos nuestros espacios comunes"></label>
+<label>Descripción<textarea id="description" rows="3"></textarea></label>
+<label>Problema inicial<textarea id="problem" rows="3" placeholder="Ej. Poco cuidado de los espacios comunes..."></textarea></label>
+<label>Reto de diseño<textarea id="challenge" rows="3"></textarea></label>
+<label>ID del equipo<input id="teamId" type="number" min="1" required value="1"></label>
+<label>Fecha de inicio<input id="startDate" type="date"></label>
 <div class="modal-actions"><button type="button" class="btn secondary" id="cancel">Cancelar</button><button class="btn primary">Crear proyecto</button></div>
 <small id="projectMsg"></small>
 </form>
